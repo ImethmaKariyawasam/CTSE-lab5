@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   item-service:
     build: ./item-service
     container_name: item-service
     ports:
-      - "7081:8081"
+      - "3081:8081"
     networks:
       - microservices-net
 
@@ -13,7 +11,7 @@ services:
     build: ./order-service
     container_name: order-service
     ports:
-      - "7082:8082"
+      - "3082:8082"
     networks:
       - microservices-net
 
@@ -21,7 +19,7 @@ services:
     build: ./payment-service
     container_name: payment-service
     ports:
-      - "7083:8083"
+      - "3083:8083"
     networks:
       - microservices-net
 
@@ -29,7 +27,7 @@ services:
     build: ./api-gateway
     container_name: api-gateway
     ports:
-      - "7080:8080"
+      - "3080:8080"
     depends_on:
       - item-service
       - order-service
