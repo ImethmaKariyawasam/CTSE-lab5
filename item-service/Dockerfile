@@ -1,7 +1,14 @@
-FROM node:20-alpine
+# Stage 1: Build
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline -q
+COPY src ./src
+RUN mvn package -DskipTests -q
+
+# Stage 2: Run
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8081
-CMD ["node", "index.js"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
